@@ -35,16 +35,6 @@ public_users.get('/',function (req, res) {
   res.send(JSON.stringify(books,null,4));
   return res.status(200);
 });
-public_users.get('/books', async function (req, res) {
-  try {
-    let response = await axios.get('http://localhost:5000/');
-    let books = response.data;
-    return res.status(200).json(books);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send('Error getting the books');
-  }
-});
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   let isbn = req.params.isbn;
@@ -54,15 +44,6 @@ public_users.get('/isbn/:isbn',function (req, res) {
   }
   return res.status(200).json(theBook);
  });
-public_users.get('/books/:isbn', async (req, res) => {
-  let isbn = req.params.isbn;
-  try {
-    const response = await axios.get(`http://localhost:5000/isbn/${isbn}`);
-    return res.status(200).json(response.data);
-  } catch (error) {
-    return res.status(404).send(`Book not found with ISBN: ${isbn}`);
-  }
-});
 
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
@@ -71,18 +52,6 @@ public_users.get('/author/:author',function (req, res) {
   let theOne = booksArray.filter((book) => book.author === author);
   return res.status(200).json(theOne);
 });
-public_users.get('/authors/:author', (req, res) => {
-  let author = req.params.author;
-  axios.get('http://localhost:5000/author/author')
-    .then(function (response) {
-      let booksArray = response.data;
-      let theOne = booksArray.filter((book) => book.author === author);
-      res.status(200).json(theOne);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-});
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
@@ -90,13 +59,6 @@ public_users.get('/title/:title',function (req, res) {
   let booksArray = Object.values(books);
   let theOne = booksArray.filter((book) => book.title === title);
   return res.status(200).json(theOne);});
-
-public_users.get('/books/:title', async (req, res) => {
-  let title = req.params.title;
-  let booksArray = Object.values(books);
-  let theOne = booksArray.filter((book) => book.title === title);
-  return res.status(200).json(theOne);
-});
   
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
